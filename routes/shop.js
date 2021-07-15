@@ -7,9 +7,15 @@ const rootDir = require('../util/path');
 const adminData = require('./admin');
 
 router.get('/', (req, res, next) => {
-  // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
-  const products = adminData.products;
-  res.render('shop', { docTitle: 'Shop', prods: products, path: '/' });
+    // res.sendFile(path.join(rootDir, 'views', 'shop.html'));
+    const products = adminData.products;
+    res.render('shop', {
+        docTitle: 'Shop',
+        prods: products,
+        path: '/',
+        hasProducts: products.length > 0,
+        activeShop: true,
+    });
 });
 
 module.exports = router;
