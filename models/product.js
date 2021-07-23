@@ -41,8 +41,27 @@ module.exports = class Product {
 
   static findByProductId(productId, cb) {
     getProductsFromFile(products => {
-       const neededProduct = products.find(({ id }) => id === productId);
-       cb(neededProduct);
+      const neededProduct = products.find(({ id }) => id === productId);
+      cb(neededProduct);
+    });
+  }
+
+  static updateProductInfo(product) {
+    getProductsFromFile(products => {
+      const neededProductIndex = products.findIndex(({ id }) => id === product.id);
+      products[neededProductIndex] = product;
+      fs.writeFile(p, JSON.stringify(products), err => {
+        console.log(err);
+      });
+    });
+  }
+
+  static deleteProduct(productId) {
+    getProductsFromFile(products => {
+      const updatedProducts = products.filter(({ id }) => id !== productId);
+      fs.writeFile(p, JSON.stringify(updatedProducts), err => {
+        console.log(err);
+      });
     });
   }
 };
