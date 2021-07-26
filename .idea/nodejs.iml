@@ -8,5 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="@types/node-jsfl-runner" level="application" />
+    <orderEntry type="library" name="@types/typescript-deferred" level="application" />
   </component>
 </module>

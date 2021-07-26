@@ -5,8 +5,8 @@
 <%- include('../includes/navigation.ejs') %>
 <main>
     <% if (cart.products.length) { %>
-        <% for (let product of cart.products) { %>
-            <ul class="product-list">
+        <ul class="product-list">
+            <% for (let product of cart.products) { %>
                 <li class="product-list__product-item">
                     <p class="product-item__product-title">Name - <%= product.title; %></p>
                     <img src="<%= product.imageUrl; %>" alt="<%= product.title; %>">
@@ -14,14 +14,14 @@
                     <p class="product-item__product-price">Quantity - <%= product.quantity; %></p>
                     <div class="cart__actions">
                         <form action="/delete-from-cart" method="POST">
-                            <input type="hidden" value="<%= product.id ;%>" name="productId">
+                            <input type="hidden" value="<%= product.productId; %>" name="productId">
                             <button class="btn" type="submit">Delete from cart</button>
                         </form>
-                        <a href="/products/<%= product.id; %>" class="btn">Details</a>
+                        <a href="/products/<%= product.productId; %>" class="btn">Details</a>
                     </div>
                 </li>
-            </ul>
-        <% } %>
+            <% } %>
+        </ul>
         <hr>
         <h2>Total price: <%= cart.totalPrice %></h2>
     <% } else { %>

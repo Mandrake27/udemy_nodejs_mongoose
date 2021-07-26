@@ -1,23 +1,4 @@
-const fs = require('fs');
-const path = require('path');
-
-const p = path.join(
-  path.dirname(require.main.filename),
-  'data',
-  'cart.json',
-);
-
 const Product = require('./product');
-
-const getCartFromFile = cb => {
-  fs.readFile(p, (err, fileContent) => {
-    if (err) {
-      cb([]);
-    } else {
-      cb(JSON.parse(fileContent));
-    }
-  });
-};
 
 module.exports = class Cart {
   static addProduct(id, productPrice) {
@@ -40,44 +21,53 @@ module.exports = class Cart {
   }
 
   static getCart(cb) {
+    getCartFromFile(cb);
+  }
+
+  static getFullInfoCart(fullProductsInfoArray, cb) {
     getCartFromFile(cart => {
       if (cart.products.length) {
-        Product.fetchAll(products => {
-            const cartProducts = [];
-            for (let { id, quantity } of cart.products) {
-              const neededProduct = products.find(product => product.id === id);
-              if (neededProduct) cartProducts.push({ ...neededProduct, quantity });
-            }
-            cb({ products: cartProducts, totalPrice: cart.totalPrice });
-          }
-        );
+        const cartProducts = [];
+        for (let { id, quantity } of cart.products) {
+          const neededProduct = fullProductsInfoArray.find(product => product.id === id);
+          if (neededProduct) cartProducts.push({ ...neededProduct, quantity });
+        }
+        cb({ products: cartProducts, totalPrice: cart.totalPrice });
       } else {
         cb({ products: [], totalPrice: 0 });
       }
     });
   }
 
-  static removeFromCart(productId) {
+  static removeFromCart(product, totalDelete = false) {
     getCartFromFile(cart => {
       let updatedCartProducts;
-      Product.fetchAll(products => {
-        const productFromGlobalList = products.find(({ id }) => id === productId);
-        const productToDeleteIndex = cart.products.findIndex(({ id }) => id === productId);
+      const productToDeleteIndex = cart.products.findIndex(({ id }) => id === product.productId);
+      if (totalDelete) {
+        if (productToDeleteIndex !== -1) {
+          const { quantity } = cart.products.find(({ id }) => id === product.productId);
+          updatedCartProducts = cart.products.filter(({ id }) => id !== product.productId);
+          cart.totalPrice -= product.productPrice * quantity;
+          fs.writeFile(p, JSON.stringify({ products: updatedCartProducts, totalPrice: cart.totalPrice }), err => {
+            if (err) {
+              console.log(err);
+            }
+          });
+        }
+      } else {
         if (cart.products[productToDeleteIndex].quantity > 1) {
           cart.products[productToDeleteIndex].quantity -= 1;
           updatedCartProducts = cart.products;
         } else {
-          updatedCartProducts = cart.products.filter(({ id }) => id !== productId);
+          updatedCartProducts = cart.products.filter(({ id }) => id !== product.productId);
         }
-        cart.totalPrice -= productFromGlobalList.price;
+        cart.totalPrice -= product.productPrice;
         fs.writeFile(p, JSON.stringify({ products: updatedCartProducts, totalPrice: cart.totalPrice }), err => {
           if (err) {
             console.log(err);
-          } else {
-            Product.deleteProduct(productId);
           }
         });
-      });
+      }
     });
   }
 };
