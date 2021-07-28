@@ -14,10 +14,10 @@
                     <p class="product-item__product-price">Quantity - <%= product.quantity; %></p>
                     <div class="cart__actions">
                         <form action="/delete-from-cart" method="POST">
-                            <input type="hidden" value="<%= product.productId; %>" name="productId">
+                            <input type="hidden" value="<%= product.id; %>" name="id">
                             <button class="btn" type="submit">Delete from cart</button>
                         </form>
-                        <a href="/products/<%= product.productId; %>" class="btn">Details</a>
+                        <a href="/products/<%= product.id; %>" class="btn">Details</a>
                     </div>
                 </li>
             <% } %>
