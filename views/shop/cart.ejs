@@ -12,21 +12,18 @@
                 <div class="cart-item__box">
                     <li class="cart__item">
                         <div class="item__info-box">
-                            <h1><%= product.title %></h1>
-                            <h1> -  $<%= product.price %></h1>
+                            <h1><%= product.title %> - $<%= product.price %> x <%= product.cartItem.quantity %></h1>
                         </div>
                         <form action="/delete-from-cart" method="POST">
                             <input type="hidden" value="<%= product.cartItem.id %>" name="id">
                             <button class="btn danger" type="submit">Delete</button>
                         </form>
                     </li>
-                    <p>x</p>
-                    <h2><%= product.cartItem.quantity %></h2>
                 </div>
                 <% }) %>
             </ul>
             <hr>
-            <div class="cart-box__action-box">
+            <div class="cart-box__action-box centered">
                 <h3>Total price: <%= cart.totalPrice %></h3>
                 <form action="/orders" method="POST">
                     <button class="btn danger" type="submit">Make order</button>
