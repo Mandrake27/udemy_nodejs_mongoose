@@ -191,7 +191,30 @@ form {
   cursor: pointer;
 }
 
+.danger {
+  border-color: #d03535;
+  color: #d03535;
+}
+
+.btn-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  font: inherit;
+  border: 1px solid #00695c;
+  color: #00695c;
+  background: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
 .btn:hover,
+.btn-small:hover,
+.btn-small:active,
 .btn:active {
   background-color: #00695c;
   color: white;

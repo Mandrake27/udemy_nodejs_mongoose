@@ -5,28 +5,33 @@
 <body>
 <%- include('../includes/navigation.ejs') %>
 <main>
-    <% if (cart.products.length > 0) { %>
+    <% if (cart.items.length > 0) { %>
         <div class="cart-box">
             <ul class="cart__item-list">
-                <% cart.products.forEach(product => { %>
-                <div class="cart-item__box">
-                    <li class="cart__item">
-                        <div class="item__info-box">
-                            <h1><%= product.title %> - $<%= product.price %> x <%= product.cartItem.quantity %></h1>
-                        </div>
-                        <form action="/delete-from-cart" method="POST">
-                            <input type="hidden" value="<%= product.cartItem.id %>" name="id">
-                            <button class="btn danger" type="submit">Delete</button>
-                        </form>
-                    </li>
-                </div>
+                <% cart.items.forEach(item => { %>
+                    <div class="cart-item__box">
+                        <li class="cart__item">
+                            <div class="item__info-box">
+                                <h1><%= item.product.title %> - $<%= item.product.price %></h1>
+                            </div>
+                            <div class="item__quantity">
+                                <a href="/update-cart-item/<%= item.product._id %>?operation=decrease" class="btn-small">-</a>
+                                <%= item.quantity %>
+                                <a href="/update-cart-item/<%= item.product._id %>?operation=increase" class="btn-small">+</a>
+                            </div>
+                            <form action="/delete-from-cart" method="POST">
+                                <input type="hidden" value="<%= item.product._id %>" name="id">
+                                <button class="btn danger" type="submit">Delete</button>
+                            </form>
+                        </li>
+                    </div>
                 <% }) %>
             </ul>
             <hr>
             <div class="cart-box__action-box centered">
                 <h3>Total price: <%= cart.totalPrice %></h3>
                 <form action="/orders" method="POST">
-                    <button class="btn danger" type="submit">Make order</button>
+                    <button class="btn" type="submit">Make order</button>
                 </form>
             </div>
         </div>
